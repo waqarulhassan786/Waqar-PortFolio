@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #060f24;
+  --foreground: #e7eef8;
+  --surface: #08172f;
+  --surface-strong: #021026;
+  --accent: #fbbf24;
+  --muted: #8da4c1;
 }
 
 @theme inline {
@@ -14,12 +18,27 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #060f24;
+    --foreground: #e7eef8;
+  }
+}
+@keyframes shine {
+  100% {
+    left: 125%;
   }
 }
 
+* {
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, transform 250ms ease;
+}
+
+::selection {
+  background: rgba(251, 191, 36, 0.25);
+  color: #f8fafc;
+}
+
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
