@@ -27,10 +27,11 @@ export default function Projects() {
       title: "Developer Portfolio",
       description: "A polished portfolio site with professional branding and responsive UX.",
       icon: "🎨",
+      image: "/Portfolio image.png",
       gradient: "from-slate-700 to-slate-500",
       technologies: ["Next.js", "Tailwind", "MERN"],
-      liveDemo: "#",
-      github: "#"
+      liveDemo: "https://waqar-port-folio-736k.vercel.app/",
+      github: "https://github.com/waqarulhassan786"
     },
     {
       title: "Social Media Dashboard",
@@ -74,7 +75,11 @@ export default function Projects() {
           {displayedProjects.map((project, index) => (
             <div key={index} className="bg-slate-950 rounded-3xl shadow-2xl shadow-black/20 overflow-hidden hover:-translate-y-1 hover:shadow-amber-500/20 transition-transform duration-300">
               <div className={`h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center`}>
-                <span className="text-white text-4xl">{project.icon}</span>
+                {project.image ? (
+                  <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-white text-4xl">{project.icon}</span>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2 text-white">{project.title}</h3>

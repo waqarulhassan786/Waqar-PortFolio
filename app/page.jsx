@@ -1,3 +1,5 @@
+"use client";
+
 import Navigation from "../components/Navigation";
 import Hero from "../components/Hero";
 import Skills from "../components/Skills";
@@ -120,11 +122,11 @@ export default function Home() {
                   <span className="text-slate-950 text-xl">🎓</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">Bachelor's in Computer Science</h3>
-                  <p className="text-amber-300">University Name</p>
+                  <h3 className="text-xl font-semibold text-white">Bachelor's in Software Engineering</h3>
+                  <p className="text-amber-300"><a href="https://www.iub.edu.pk/">The Islamia University Bahawalpur</a></p>
                 </div>
               </div>
-              <p className="text-slate-400">2018 - 2022</p>
+              <p className="text-slate-400">2022 - 2026</p>
               <p className="text-slate-400 mt-2">Graduated with honors, focusing on web technologies and software development.</p>
             </div>
             <div className="bg-slate-900 p-8 rounded-3xl shadow-2xl shadow-black/20">
@@ -134,10 +136,10 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white">Web Development Certification</h3>
-                  <p className="text-amber-300">Online Platform</p>
+                  <p className="text-amber-300"><a href="https://codesthinker.com/"  >Codes Thinker</a></p>
                 </div>
               </div>
-              <p className="text-slate-400">2021</p>
+              <p className="text-slate-400">2023 - 2024</p>
               <p className="text-slate-400 mt-2">Comprehensive course covering modern web development technologies and best practices.</p>
             </div>
           </div>
