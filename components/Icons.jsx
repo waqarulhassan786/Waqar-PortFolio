@@ -1,3 +1,12 @@
+export function IconLayers({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinejoin="round" d="M12 3l9 5-9 5-9-5 9-5z" />
+      <path strokeLinecap="round" d="M3 13l9 5 9-5M3 17l9 5 9-5" />
+    </svg>
+  );
+}
+
 export function IconMenu({ className = "h-5 w-5" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -14,27 +23,10 @@ export function IconClose({ className = "h-5 w-5" }) {
   );
 }
 
-export function IconDownload({ className = "h-4 w-4" }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M5 19h14" />
-    </svg>
-  );
-}
-
 export function IconArrow({ className = "h-4 w-4" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m0 0l-5-5m5 5l-5 5" />
-    </svg>
-  );
-}
-
-export function IconPin({ className = "h-5 w-5" }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s7-5.4 7-11a7 7 0 10-14 0c0 5.6 7 11 7 11z" />
-      <circle cx="12" cy="10" r="2.2" />
     </svg>
   );
 }
@@ -55,14 +47,6 @@ export function IconGitHub({ className = "h-5 w-5" }) {
   );
 }
 
-export function IconWhatsApp({ className = "h-5 w-5" }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M20.5 3.5A11 11 0 006.3 18.7L3 21l2.4-3.2A11 11 0 1020.5 3.5zm-8.5 17a9.1 9.1 0 01-4.6-1.3l-.3-.2-2.7 1 1-2.6-.2-.3A9.1 9.1 0 1112 20.5zm5-6.8c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.4 7.4 0 01-2.2-1.4 8.2 8.2 0 01-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5.3-.4a.5.5 0 000-.5l-.9-2.1c-.2-.6-.5-.5-.6-.5h-.5a1 1 0 00-.7.3 3 3 0 00-1 2.2 5.3 5.3 0 001.1 2.8 12 12 0 004.6 4.1 5.5 5.5 0 002.4.8 2.9 2.9 0 001.9-.8 2.4 2.4 0 00.5-1.7c0-.2 0-.3-.2-.4z" />
-    </svg>
-  );
-}
-
 export function IconGmail({ className = "h-5 w-5" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -71,10 +55,143 @@ export function IconGmail({ className = "h-5 w-5" }) {
   );
 }
 
+export function IconChevron({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
+export function IconPerson({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20 21v-2.2A3.8 3.8 0 0016.2 15H7.8A3.8 3.8 0 004 18.8V21" />
+      <circle cx="12" cy="8" r="3.5" />
+    </svg>
+  );
+}
+
+export function IconCopy({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M5 15V5h10" />
+    </svg>
+  );
+}
+
+export function IconCheck({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12l4 4 10-10" />
+    </svg>
+  );
+}
+
 export function IconExternal({ className = "h-4 w-4" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" d="M14 5h5v5M19 5l-9 9M10 5H6a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1v-4" />
+    </svg>
+  );
+}
+
+export function IconOutdent({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h10M4 12h16M4 18h10M20 8l-4 4 4 4" />
+    </svg>
+  );
+}
+
+export function IconBriefcase({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path strokeLinecap="round" d="M8 7V5.8A1.8 1.8 0 019.8 4h4.4A1.8 1.8 0 0116 5.8V7M3 13h18" />
+    </svg>
+  );
+}
+
+export function IconGrad({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinejoin="round" d="M3 10l9-5 9 5-9 5-9-5z" />
+      <path strokeLinecap="round" d="M7 12.2V16c0 .8 2.2 2.2 5 2.2s5-1.4 5-2.2v-3.8" />
+    </svg>
+  );
+}
+
+export function IconOrbit({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <ellipse cx="12" cy="12" rx="9" ry="4.5" />
+      <path strokeLinecap="round" d="M12 3v2M12 19v2" />
+    </svg>
+  );
+}
+
+export function IconSpark({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2.5l1.2 6.3L19.5 10 13.2 11.7 12 18l-1.2-6.3L4.5 10l6.3-1.2L12 2.5z" />
+    </svg>
+  );
+}
+
+export function IconBars({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" d="M5 19V10M12 19V5M19 19v-7" />
+    </svg>
+  );
+}
+
+export function IconNodes({ className = "h-3.5 w-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="3" y="3" width="7" height="7" rx="1.2" />
+      <rect x="14" y="3" width="7" height="7" rx="1.2" />
+      <rect x="3" y="14" width="7" height="7" rx="1.2" />
+      <rect x="14" y="14" width="7" height="7" rx="1.2" />
+    </svg>
+  );
+}
+
+export function IconStack({ className = "h-5 w-5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinejoin="round" d="M12 3l9 5-9 5-9-5 9-5z" />
+      <path strokeLinecap="round" d="M3 13l9 5 9-5M3 17l9 5 9-5" />
+    </svg>
+  );
+}
+
+export function IconWindow({ className = "h-5 w-5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path strokeLinecap="round" d="M3 9h18" />
+    </svg>
+  );
+}
+
+export function IconGlobe({ className = "h-5 w-5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 3 3.8 6 3.8 9S14.5 18 12 21c-2.5-3-3.8-6-3.8-9S9.5 6 12 3z" />
+    </svg>
+  );
+}
+
+export function IconGear({ className = "h-5 w-5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <path strokeLinejoin="round" d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9c.3.7.9 1.2 1.6 1.4H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z" />
     </svg>
   );
 }

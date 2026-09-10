@@ -1,14 +1,14 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { profile } from "../lib/content";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const body = Space_Grotesk({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mono = JetBrains_Mono({
+  variable: "--font-code",
   subsets: ["latin"],
 });
 
@@ -16,7 +16,10 @@ const description = `${profile.name} — Software Engineer and Full-Stack Develo
 
 export const metadata = {
   metadataBase: new URL(profile.siteUrl),
-  title: `${profile.name} | Software Engineer & Full-Stack Developer`,
+  title: {
+    default: profile.name,
+    template: `%s | ${profile.name}`,
+  },
   description,
   keywords: [
     "Full Stack Developer",
@@ -47,7 +50,14 @@ export const metadata = {
     title: `${profile.name} | Software Engineer & Full-Stack Developer`,
     description,
   },
-  icons: { icon: "/favicon.png" },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/favicon.png" }],
+    shortcut: ["/favicon.png"],
+  },
 };
 
 const jsonLd = {
@@ -69,8 +79,8 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <body>
+    <html lang="en" className={`${body.variable} ${mono.variable} antialiased`}>
+      <body suppressHydrationWarning>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         {children}
       </body>

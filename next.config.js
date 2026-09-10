@@ -1,5 +1,3 @@
-const nextConfig = {
-  transpilePackages: ["three"],
-};
+const nextConfig = {};
 
 export default nextConfig;

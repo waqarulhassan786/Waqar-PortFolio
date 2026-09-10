@@ -2,181 +2,146 @@
 
 import { useState } from "react";
 import { profile } from "../../lib/content";
-import { IconGitHub, IconGmail, IconLinkedIn, IconPin, IconWhatsApp } from "../Icons";
-import SocialLinks from "../SocialLinks";
+import { IconCheck, IconCopy, IconGitHub, IconGmail, IconLinkedIn } from "../Icons";
 import Reveal from "../ui/Reveal";
 import SectionHeading from "../ui/SectionHeading";
 
-const initial = { name: "", email: "", subject: "", message: "" };
+const ORBIT = 128;
 
-function isEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
+const nodes = [
+  { id: "email", label: "Email", hint: "Drop a message", value: profile.email, href: profile.gmail, icon: IconGmail, angle: -90 },
+  { id: "linkedin", label: "LinkedIn", hint: "Professional network", value: "waqar-ul-hassan786", href: profile.linkedin, icon: IconLinkedIn, angle: 0 },
+  { id: "github", label: "GitHub", hint: "Source & projects", value: "waqarulhassan786", href: profile.github, icon: IconGitHub, angle: 90 },
+  { id: "schedule", label: "Schedule", hint: "Book a call via Email", value: "Available now", href: profile.gmail, icon: IconGmail, angle: 180 },
+];
 
 export default function Contact() {
-  const [form, setForm] = useState(initial);
-  const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle");
-  const [note, setNote] = useState("");
+  const [active, setActive] = useState("email");
+  const [copied, setCopied] = useState(false);
+  const current = nodes.find((item) => item.id === active) || nodes[0];
 
-  function validate() {
-    const next = {};
-    if (!form.name.trim()) next.name = "Name is required.";
-    if (!form.email.trim()) next.email = "Email is required.";
-    else if (!isEmail(form.email)) next.email = "Enter a valid email.";
-    if (!form.subject.trim()) next.subject = "Subject is required.";
-    if (form.message.trim().length < 12) next.message = "Message should be at least 12 characters.";
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    if (!validate()) {
-      setStatus("error");
-      setNote("Please fix the highlighted fields.");
-      return;
-    }
-
-    setStatus("loading");
-    setNote("");
-    const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
-
+  async function copyEmail() {
     try {
-      if (endpoint) {
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        if (!response.ok) throw new Error("Request failed");
-        setStatus("success");
-        setNote("Message sent.");
-        setForm(initial);
-        return;
-      }
-
-      const subject = encodeURIComponent(form.subject);
-      const body = encodeURIComponent(`${form.message}\n\nFrom: ${form.name}\nEmail: ${form.email}`);
-      window.open(`${profile.gmail}&su=${subject}&body=${body}`, "_blank", "noopener,noreferrer");
-      setStatus("success");
-      setNote("Gmail should open with your message. If it doesn't, email me directly.");
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
     } catch {
-      setStatus("error");
-      setNote("Something went wrong. Email me directly instead.");
+      window.open(profile.gmail, "_blank", "noopener,noreferrer");
     }
   }
-
-  const details = [
-    { label: "Email", value: profile.email, href: profile.gmail, icon: IconGmail },
-    { label: "LinkedIn", value: "waqar-ul-hassan786", href: profile.linkedin, icon: IconLinkedIn },
-    { label: "GitHub", value: "waqarulhassan786", href: profile.github, icon: IconGitHub },
-    { label: "WhatsApp", value: profile.phone, href: profile.whatsapp, icon: IconWhatsApp },
-    { label: "Location", value: profile.location, href: null, icon: IconPin },
-  ];
 
   return (
-    <section id="contact" className="relative z-10 border-t border-white/5 py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading kicker="Contact" title="Let’s talk about a role or a build" />
-        <div className="grid gap-10 lg:grid-cols-2">
+    <section id="contact" className="relative overflow-hidden border-t border-white/5 py-14">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SectionHeading
+          kicker="Contact"
+          kickerIcon={<span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />}
+          title="Ready to Collaborate?"
+          highlight="Collaborate?"
+          text="Open to projects, partnerships, and conversations."
+          badge={
+            <>
+              Open
+              <br />
+              now
+            </>
+          }
+          rail
+        />
+
+        <div className="grid items-center gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <Reveal>
-            <p className="max-w-xl text-slate-300">
-              For full-stack MERN work, frontend delivery, or coordination between clients and engineering teams.
-            </p>
-            <SocialLinks showLabels className="mt-8" />
-            <div className="mt-8 space-y-3">
-              {details.map((item) => {
+            <div className="contact-orbit relative mx-auto h-[320px] w-[320px]">
+              <div
+                className="pointer-events-none absolute left-1/2 top-1/2 rounded-full border border-dashed border-white/12"
+                style={{ width: ORBIT * 2, height: ORBIT * 2, transform: "translate(-50%, -50%)" }}
+              />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/8" />
+              <div className="absolute left-1/2 top-1/2 z-10 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-[#111113] text-lg font-semibold">
+                WH
+              </div>
+              {nodes.map((item) => {
                 const Icon = item.icon;
-                const inner = (
-                  <div className="glass flex items-center gap-4 rounded-2xl p-4 transition hover:border-amber-400/40">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-amber-400 text-slate-950">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold text-white">{item.label}</p>
-                      <p className="text-sm text-slate-400">{item.value}</p>
-                    </div>
-                  </div>
-                );
-                return item.href ? (
-                  <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="block">
-                    {inner}
-                  </a>
-                ) : (
-                  <div key={item.label}>{inner}</div>
+                const hot = item.id === active;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`absolute left-1/2 top-1/2 z-10 grid h-14 w-14 place-items-center rounded-full border ${hot ? "border-white bg-white text-zinc-950" : "border-white/15 bg-[#111113] text-zinc-300"}`}
+                    style={{ transform: `translate(-50%, -50%) rotate(${item.angle}deg) translate(${ORBIT}px) rotate(${-item.angle}deg)` }}
+                    onMouseEnter={() => setActive(item.id)}
+                    onFocus={() => setActive(item.id)}
+                    onClick={() => setActive(item.id)}
+                    aria-label={item.label}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </button>
                 );
               })}
             </div>
+            <h3 className="mt-6 text-center text-lg text-white">Pick a way to reach me</h3>
           </Reveal>
 
           <Reveal delay={80}>
-            <form onSubmit={handleSubmit} className="glass space-y-4 rounded-3xl p-6 md:p-8" noValidate>
-              <label className="block">
-                <span className="mb-2 block text-sm text-slate-200">Name</span>
-                <input
-                  name="name"
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-                  className="w-full rounded-2xl border border-white/10 bg-[#101526] px-4 py-3 text-slate-100 outline-none ring-amber-400/20 focus:border-amber-400 focus:ring-2"
-                  aria-invalid={!!errors.name}
-                />
-                {errors.name ? <span className="mt-1 block text-xs text-rose-300">{errors.name}</span> : null}
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-sm text-slate-200">Email</span>
-                <input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
-                  className="w-full rounded-2xl border border-white/10 bg-[#101526] px-4 py-3 text-slate-100 outline-none ring-amber-400/20 focus:border-amber-400 focus:ring-2"
-                  aria-invalid={!!errors.email}
-                />
-                {errors.email ? <span className="mt-1 block text-xs text-rose-300">{errors.email}</span> : null}
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-sm text-slate-200">Subject</span>
-                <input
-                  name="subject"
-                  type="text"
-                  value={form.subject}
-                  onChange={(e) => setForm((prev) => ({ ...prev, subject: e.target.value }))}
-                  className="w-full rounded-2xl border border-white/10 bg-[#101526] px-4 py-3 text-slate-100 outline-none ring-amber-400/20 focus:border-amber-400 focus:ring-2"
-                  aria-invalid={!!errors.subject}
-                />
-                {errors.subject ? <span className="mt-1 block text-xs text-rose-300">{errors.subject}</span> : null}
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-sm text-slate-200">Message</span>
-                <textarea
-                  name="message"
-                  rows="5"
-                  value={form.message}
-                  onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
-                  className="w-full resize-none rounded-2xl border border-white/10 bg-[#101526] px-4 py-3 text-slate-100 outline-none ring-amber-400/20 focus:border-amber-400 focus:ring-2"
-                  aria-invalid={!!errors.message}
-                />
-                {errors.message ? <span className="mt-1 block text-xs text-rose-300">{errors.message}</span> : null}
-              </label>
+            <div className="space-y-2">
+              {nodes.map((item) => {
+                const Icon = item.icon;
+                const hot = item.id === active;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`flex w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-left ${hot ? "border-white/25 bg-white/5" : "border-white/8 hover:border-white/20"}`}
+                    onMouseEnter={() => setActive(item.id)}
+                    onClick={() => setActive(item.id)}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span className="grid h-9 w-9 place-items-center rounded-full border border-white/10">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <span>
+                        <span className="block text-sm text-white">{item.label}</span>
+                        <span className="block text-xs text-zinc-500">{item.hint}</span>
+                      </span>
+                    </span>
+                    <span className="hidden text-xs text-zinc-500 sm:block">{item.value}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-3">
               <button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full rounded-2xl bg-amber-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60"
+                type="button"
+                onClick={copyEmail}
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white hover:bg-white/5"
               >
-                {status === "loading" ? "Sending…" : "Send message"}
+                {copied ? <IconCheck /> : <IconCopy />}
+                {copied ? "Copied" : "Copy email"}
               </button>
-              {note ? (
-                <p
-                  role="status"
-                  aria-live="polite"
-                  className={`text-sm ${status === "error" ? "text-rose-300" : "text-emerald-300"}`}
-                >
-                  {note}
-                </p>
-              ) : null}
-            </form>
+              <a
+                href={current.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-zinc-950"
+              >
+                {current.id === "schedule" ? "Book" : "Open"} {current.label}
+              </a>
+            </div>
+
+            <a
+              href={profile.gmail}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex items-center justify-between rounded-3xl border border-white/10 bg-[#111113] px-5 py-5 hover:border-white/20"
+            >
+              <span>
+                <span className="block text-[11px] uppercase tracking-[0.18em] text-zinc-500">Next step</span>
+                <span className="mt-2 block text-xl text-white">Schedule a Call</span>
+                <span className="mt-1 block text-sm text-zinc-500">Available now</span>
+              </span>
+              <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-zinc-950">Book</span>
+            </a>
           </Reveal>
         </div>
       </div>

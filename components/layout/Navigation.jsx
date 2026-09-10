@@ -1,17 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { navLinks, profile } from "../../lib/content";
-import { IconClose, IconDownload, IconMenu } from "../Icons";
-import Magnetic from "../ui/Magnetic";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { beyondLinks, navLinks, profile } from "../../lib/content";
+import { IconChevron, IconClose, IconMenu } from "../Icons";
+import { useTerminal } from "../terminal/TerminalContext";
+
+function resolveHref(href, onProjectsPage) {
+  if (href.startsWith("http") || href.startsWith("/")) return href;
+  if (onProjectsPage) return `/${href}`;
+  return href;
+}
 
 export default function Navigation() {
+  const pathname = usePathname();
+  const onProjectsPage = pathname === "/projects";
+  const { open: terminalOpen, toggle } = useTerminal();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("#home");
+  const [beyond, setBeyond] = useState(false);
+  const [active, setActive] = useState(onProjectsPage ? "/projects" : "#about");
+  const beyondRef = useRef(null);
 
   useEffect(() => {
-    const ids = [...new Set(navLinks.map((link) => link.href.slice(1)))];
+    if (onProjectsPage) {
+      setActive("/projects");
+      return undefined;
+    }
+
+    const ids = ["home", ...navLinks.map((link) => link.href.slice(1)), "services", "contact"];
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -26,7 +43,7 @@ export default function Navigation() {
       if (node) observer.observe(node);
     });
     return () => observer.disconnect();
-  }, []);
+  }, [onProjectsPage]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -35,84 +52,175 @@ export default function Navigation() {
     };
   }, [open]);
 
+  useEffect(() => {
+    const onClick = (event) => {
+      if (!beyondRef.current?.contains(event.target)) setBeyond(false);
+    };
+    const onKey = (event) => {
+      if (event.key === "Escape") setBeyond(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  const homeHref = onProjectsPage ? "/" : "#home";
+  const contactHref = onProjectsPage ? "/#contact" : "#contact";
+
   return (
-    <header className="fixed top-0 z-[200] w-full transform-gpu">
-      <div className="absolute inset-0 border-b border-white/8 bg-[#07090f]" />
-      <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="#home" className="focus-ring flex items-center gap-2 text-white">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-400 text-sm font-bold text-slate-950">
+    <header className="fixed top-0 z-[200] w-full">
+      <div className="absolute inset-0 bg-[#0c0c0d]" />
+      <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+        <Link href={homeHref} className="focus-ring flex items-center gap-2 text-white">
+          <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/5 text-xs font-semibold">
             WH
           </span>
-          <span className="text-sm font-semibold tracking-tight sm:text-base">{profile.firstName}</span>
-        </a>
+          <span className="hidden text-sm sm:block">
+            <span className="font-semibold">Waqar</span> <span className="text-zinc-500">ul Hassan</span>
+          </span>
+        </Link>
 
-        <div className="hidden items-center gap-4 xl:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`nav-link focus-ring text-xs tracking-wide ${
-                active === link.href ? "is-active text-amber-300" : "text-slate-300 hover:text-amber-300"
+        <nav className="nav-pill hidden items-center gap-1 rounded-full px-2 py-1 xl:flex">
+          {navLinks.map((link) => {
+            const href = link.href === "#projects" ? "/projects" : resolveHref(link.href, onProjectsPage);
+            const isActive = link.href === "#projects" ? onProjectsPage : active === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={href}
+                className={`rounded-full px-3 py-1.5 text-xs ${
+                  isActive ? "bg-white/10 text-white" : "text-zinc-400 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <div className="relative" ref={beyondRef}>
+            <button
+              type="button"
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs ${
+                beyond ? "bg-white/10 text-white" : "text-zinc-400 hover:text-white"
               }`}
+              aria-expanded={beyond}
+              aria-haspopup="true"
+              onClick={() => setBeyond((value) => !value)}
             >
-              {link.label}
-            </a>
-          ))}
-          <Magnetic>
-            <a
-              href={profile.resume}
-              download
-              className="focus-ring inline-flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-amber-300"
-            >
-              <IconDownload />
-              Resume
-            </a>
-          </Magnetic>
-        </div>
+              Beyond
+              <IconChevron className={`h-3 w-3 transition ${beyond ? "rotate-180" : ""}`} />
+            </button>
+            {beyond ? (
+              <div className="absolute right-0 top-[calc(100%+10px)] w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#111113] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+                {beyondLinks.map((item) => {
+                  const href = resolveHref(item.href, onProjectsPage);
+                  return (
+                    <a
+                      key={item.label}
+                      href={href}
+                      target={item.external ? "_blank" : undefined}
+                      rel={item.external ? "noopener noreferrer" : undefined}
+                      className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-zinc-300 hover:bg-white/5 hover:text-white"
+                      onClick={() => setBeyond(false)}
+                    >
+                      <span>{item.label}</span>
+                      <span className="text-[10px] uppercase tracking-widest text-zinc-600">{item.hint}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </nav>
 
-        <button
-          type="button"
-          className="focus-ring inline-flex items-center justify-center rounded-lg border border-white/10 p-2 text-slate-100 xl:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? <IconClose /> : <IconMenu />}
-        </button>
-      </nav>
-
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="fixed inset-x-0 top-16 z-[70] min-h-[calc(100dvh-4rem)] border-t border-white/10 bg-[#07090f] px-4 py-5 xl:hidden"
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="hidden items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-300 hover:text-white sm:inline-flex"
+            aria-pressed={terminalOpen}
+            aria-label={terminalOpen ? "Close Developer Terminal" : "Open Developer Terminal"}
+            onClick={toggle}
           >
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <a
+            <span className="font-mono text-[11px]">{">_"}</span>
+            Dev Mode
+            <span className={`dev-switch ${terminalOpen ? "is-on" : ""}`} />
+          </button>
+          <a
+            href={contactHref}
+            className="hidden rounded-full border border-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-white hover:bg-white hover:text-zinc-950 sm:inline-flex"
+          >
+            Let's Connect
+          </a>
+          <button
+            type="button"
+            className="focus-ring inline-flex items-center justify-center rounded-lg border border-white/10 p-2 text-zinc-100 xl:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? <IconClose /> : <IconMenu />}
+          </button>
+        </div>
+      </div>
+
+      {open ? (
+        <div className="border-t border-white/10 bg-[#0c0c0d] px-4 py-5 xl:hidden">
+          <div className="flex flex-col gap-2">
+            {navLinks.map((link) => {
+              const href = link.href === "#projects" ? "/projects" : resolveHref(link.href, onProjectsPage);
+              return (
+                <Link
                   key={link.href}
-                  href={link.href}
-                  className="rounded-lg px-3 py-3 text-slate-200 hover:bg-white/5 hover:text-amber-300"
+                  href={href}
+                  className="rounded-lg px-3 py-3 text-zinc-200 hover:bg-white/5"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
-                </a>
-              ))}
+                </Link>
+              );
+            })}
+            {beyondLinks.map((item) => (
               <a
-                href={profile.resume}
-                download
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-amber-400 px-4 py-3 text-sm font-semibold text-slate-950"
+                key={item.label}
+                href={resolveHref(item.href, onProjectsPage)}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
+                className="rounded-lg px-3 py-3 text-zinc-200 hover:bg-white/5"
                 onClick={() => setOpen(false)}
               >
-                <IconDownload />
-                Download Resume
+                {item.label}
               </a>
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            ))}
+            <button
+              type="button"
+              className="rounded-lg px-3 py-3 text-left text-zinc-200 hover:bg-white/5"
+              onClick={() => {
+                setOpen(false);
+                toggle();
+              }}
+            >
+              Dev Mode
+            </button>
+            <a
+              href={contactHref}
+              className="rounded-lg px-3 py-3 text-zinc-200 hover:bg-white/5"
+              onClick={() => setOpen(false)}
+            >
+              Let's Connect
+            </a>
+            <a
+              href={profile.resume}
+              download
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-white px-4 py-3 text-sm font-semibold text-zinc-950"
+              onClick={() => setOpen(false)}
+            >
+              View My CV
+            </a>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }
